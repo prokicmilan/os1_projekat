@@ -54,7 +54,6 @@ void Thread::start() {
 void Thread::waitToComplete() {
 	LOCK_INTR
 	//ne ceka samu sebe, idle, main, zavrsenu i novu nit
-	//multiline potencijal za problem (BCC)
 	if (myPCB == Kernel::running || this == Kernel::idle 
 								 || this == Kernel::mainThread
 							  	 || Kernel::running->getStatus() == FINISHED 

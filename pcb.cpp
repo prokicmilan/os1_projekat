@@ -14,7 +14,9 @@ void PCB::wrapper() {
 	PCB *pcb = Kernel::running->waitingQueue->get();
 	while (pcb != 0) {
 		pcb->setStatus(READY);
-		Scheduler::put(pcb);
+		if (pcb != Kernel::mainThread && pcb != Kernel::idle) {
+			Scheduler::put(pcb);
+		}
 	}
 	dispatch();
 	UNLOCK_INTR
