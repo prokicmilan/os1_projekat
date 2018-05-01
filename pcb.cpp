@@ -4,8 +4,6 @@
 #include "schedule.h"
 #include <dos.h>
 
-#include <conio.h>
-
 ID PCB::prevID = 0;
 
 void PCB::wrapper() {

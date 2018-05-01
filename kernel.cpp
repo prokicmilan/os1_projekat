@@ -5,8 +5,6 @@
 #include "schedule.h"
 #include <dos.h>
 
-#include <conio.h>
-
 Kernel* Kernel::kernelInstance = 0;
 PCB* Kernel::running = 0;
 IdleThread* Kernel::idle = 0;
@@ -72,9 +70,6 @@ void interrupt Kernel::timerISR(...) {
 			PCB *pcb = qi.next();
 			if (++pcb->passedTime == pcb->sleepTime) {
 				pcb->status = READY;
-				if (pcb == Kernel::mainThread->myPCB) {
-					cprintf("main\r\n");
-				}
 				if (pcb != Kernel::mainThread->myPCB) {
 					Scheduler::put(pcb);
 				}

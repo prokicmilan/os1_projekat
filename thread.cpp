@@ -56,7 +56,6 @@ void Thread::start() {
 		myPCB->createStack();
 		myPCB->setStatus(READY);
 		Kernel::idQueue->put(myPCB);
-		//cprintf("Ubacen %d\r\n", myPCB->id);
 		Scheduler::put(myPCB);
 	}
 	UNLOCK_INTR
@@ -67,8 +66,8 @@ void Thread::waitToComplete() {
 	//ne ceka samu sebe, idle, main, zavrsenu i novu nit
 	if (myPCB == Kernel::running || this == Kernel::idle 
 								 || this == Kernel::mainThread
-							  	 || Kernel::running->getStatus() == FINISHED 
-							     || Kernel::running->getStatus() == NEW) {
+							  	 || myPCB->status == FINISHED 
+							     || myPCB->status == NEW) {
 		UNLOCK_INTR
 		return;
 	}

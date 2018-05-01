@@ -9,7 +9,7 @@ public:
 		this->a = a;
 	}
 
-	~ThreadA() {
+	virtual ~ThreadA() {
 		waitToComplete();
 	}
 
