@@ -5,6 +5,8 @@
 #include "queue.h"
 #include "def.h"
 
+#include <conio.h>
+
 Thread::Thread(StackSize stackSize, Time timeSlice) {
 	LOCK_INTR;
 	myPCB = new PCB(this, stackSize, timeSlice);
@@ -13,6 +15,7 @@ Thread::Thread(StackSize stackSize, Time timeSlice) {
 
 Thread::~Thread() {
 	waitToComplete();
+	cprintf("destructing\r\n");
 	delete myPCB;
 }
 

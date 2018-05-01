@@ -4,9 +4,11 @@
 #include "schedule.h"
 #include <dos.h>
 
+#include <conio.h>
+
 Kernel* Kernel::kernelInstance = 0;
 PCB* Kernel::running = 0;
-Thread* Kernel::idle = 0;
+IdleThread* Kernel::idle = 0;
 Thread* Kernel::mainThread = 0;
 Queue* Kernel::idQueue = 0;
 volatile Time Kernel::cntr = 20;
@@ -42,8 +44,9 @@ void Kernel::initialize() {
 	setvect(0x60, oldTmr);
 	idle = new IdleThread();
 	idle->start();
-	mainThread = new Thread();
+	mainThread = new Thread(4096, 200);
 	mainThread->myPCB->setStatus(READY);
+	mainThread->myPCB->createStack();
 	idQueue = new Queue();
 	running = mainThread->myPCB;
 	UNLOCK_INTR
@@ -75,8 +78,9 @@ void interrupt Kernel::timerISR(...) {
 		running->sp = tsp;
 		running->ss = tss;
 		running->bp = tbp;
-		if (mainThread->getId() != running->getId() && //ako nije glavna nit
-		   idle->getId() != running->getId() && //ni idle nit
+		if (running != mainThread->myPCB && //ako nije glavna nit
+		   running != idle->myPCB && //ni idle nit
+		   running->getStatus() != BLOCKED && //ni blokirana nit
 		   running->getStatus() != FINISHED) { //ni gotova nit
 			Scheduler::put(running);
 		}

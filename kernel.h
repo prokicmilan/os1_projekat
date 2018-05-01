@@ -7,6 +7,7 @@
 #ifndef _KERNEL_H_
 #define _KERNEL_H_
 
+#include "idleth.h"
 #include "def.h"
 
 class Thread;
@@ -28,7 +29,7 @@ protected:
 private:
 	static Kernel *kernelInstance;
 	static PCB *running;
-	static Thread *idle;
+	static IdleThread *idle;
 	static Thread *mainThread;
 	static Queue *idQueue;
 	static Queue *sleepingQueue;

@@ -8,7 +8,8 @@ public:
 	ThreadA(int a, StackSize stackSize = defaultStackSize, Time timeSlice = defaultTimeSlice) : Thread(stackSize, timeSlice) {
 		this->a = a;
 	}
-	virtual ~ThreadA() {
+
+	~ThreadA() {
 		waitToComplete();
 	}
 

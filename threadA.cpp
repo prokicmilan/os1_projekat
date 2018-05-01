@@ -1,14 +1,13 @@
 #include "threadA.h"
 #include "def.h"
-#include <iostream.h>
+
+#include <conio.h>
 
 void ThreadA::run() {
-	for (int i = 0; i < 30; i++) {
-		LOCK_INTR
-		cout << "a = " << a << " i = " << i << endl;
-		UNLOCK_INTR
-		for (int j = 0; j < 10000; j++) {
-			for (int k = 0; k < 10000; k++);
+	for (int i = 0; i < 10; i++) {
+		cprintf("a = %d i = %d\r\n",a, i);
+		for (int j = 0; j < 30000; j++) {
+			for (int k = 0; k < 30000; k++);
 		}
 	}
 }
