@@ -1,6 +1,7 @@
 #include "kernel.h"
 #include "idleth.h"
 #include "queue.h"
+#include "qiter.h"
 #include "schedule.h"
 #include <dos.h>
 
@@ -11,6 +12,7 @@ PCB* Kernel::running = 0;
 IdleThread* Kernel::idle = 0;
 Thread* Kernel::mainThread = 0;
 Queue* Kernel::idQueue = 0;
+Queue* Kernel::sleepingQueue = 0;
 volatile Time Kernel::cntr = 20;
 int Kernel::explicitDispatch = 0;
 pInterrupt Kernel::oldTmr = 0;
@@ -45,7 +47,7 @@ void Kernel::initialize() {
 	idle = new IdleThread();
 	idle->start();
 	mainThread = new Thread(4096, 200);
-	mainThread->myPCB->setStatus(READY);
+	mainThread->myPCB->status = READY;
 	mainThread->myPCB->createStack();
 	idQueue = new Queue();
 	running = mainThread->myPCB;
@@ -60,15 +62,29 @@ void Kernel::restore() {
 
 void interrupt Kernel::timerISR(...) {
 	if (!explicitDispatch) {
-		cntr--;
-	}
-	if (!explicitDispatch) {
 		asm int 60h
 		tick();
+		static QueueIterator *qi = new QueueIterator(sleepingQueue);
+		/* Prolazi kroz ceo niz uspavanih niti i osvezava im proteklo vreme.
+		* Ukoliko je nekoj niti isteklo vreme spavanja, odblokira je i 
+		* vraca je u Scheduler ali samo ako nije main ili idle nit
+		*/
+		while (!qi->isDone()) {
+			PCB *pcb = qi->next();
+			if (++pcb->passedTime == pcb->sleepTime) {
+				pcb->status = READY;
+				if (pcb != Kernel::mainThread->myPCB) {
+					Scheduler::put(pcb);
+				}
+			}
+		}
+		delete qi;
+	}
+	if (running->timeSlice != 0) {
+		running->passedTime++;
 	}
 	//TODO: zabrana preuzimanja bez zabrane prekida
-	//TODO: preci na implementaciju u kojoj nit zna koliko se dugo izvrsavala
-	if (cntr == 0 || explicitDispatch) {
+	if (running->passedTime == running->timeSlice || explicitDispatch) {
 		static unsigned tsp, tss, tbp;
 		asm {
 			mov tsp, sp
@@ -80,13 +96,13 @@ void interrupt Kernel::timerISR(...) {
 		running->bp = tbp;
 		if (running != mainThread->myPCB && //ako nije glavna nit
 		   running != idle->myPCB && //ni idle nit
-		   running->getStatus() != BLOCKED && //ni blokirana nit
-		   running->getStatus() != FINISHED) { //ni gotova nit
+		   running->status != BLOCKED && //ni blokirana nit
+		   running->status != FINISHED) { //ni gotova nit
 			Scheduler::put(running);
 		}
 		running = Scheduler::get();
 		if (running == 0) {
-			if (idQueue->isEmpty()) {
+			if (idQueue->isEmpty() && mainThread->myPCB->status != BLOCKED) {
 				running = mainThread->myPCB;
 			}
 			else {

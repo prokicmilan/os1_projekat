@@ -15,7 +15,6 @@ Thread::Thread(StackSize stackSize, Time timeSlice) {
 
 Thread::~Thread() {
 	waitToComplete();
-	cprintf("destructing\r\n");
 	delete myPCB;
 }
 
@@ -39,8 +38,18 @@ Thread* Thread::getThreadById(ID id) {
 	return 0;
 }
 
+//uspavljuje tekucu nit na odredjeno vreme, predaje procesor nekoj drugoj niti
 void Thread::sleep(Time timeToSleep) {
-	return;
+	LOCK_INTR
+	if (Kernel::running == 0) {
+		UNLOCK_INTR
+		return;
+	}
+	Kernel::running->sleepTime = timeToSleep;
+	Kernel::running->status = BLOCKED;
+	Kernel::sleepingQueue->put(Kernel::running);
+	dispatch();
+	UNLOCK_INTR
 }
 
 void Thread::start() {
@@ -49,6 +58,7 @@ void Thread::start() {
 		myPCB->createStack();
 		myPCB->setStatus(READY);
 		Kernel::idQueue->put(myPCB);
+		//cprintf("Ubacen %d\r\n", myPCB->id);
 		Scheduler::put(myPCB);
 	}
 	UNLOCK_INTR

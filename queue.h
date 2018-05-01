@@ -9,6 +9,8 @@
 #include "pcb.h"
 #include "def.h"
 
+class QueueIterator;
+
 struct Node {
 	PCB *pcb;
 	Node *next;
@@ -23,9 +25,12 @@ public:
 	PCB* get();
 	PCB* findById(ID id);
 	void removeById(ID id);
+protected:
+	friend class QueueIterator;
 private:
 	Node *first;
 	Node *last;
+	//zabranjeno kopiranje
 	Queue(const Queue&) {}
 	Queue& operator=(const Queue&) { return *this; }
 };

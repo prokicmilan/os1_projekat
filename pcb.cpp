@@ -4,14 +4,11 @@
 #include "schedule.h"
 #include <dos.h>
 
-#include <conio.h>
-
 ID PCB::prevID = 0;
 
 void PCB::wrapper() {
 	Kernel::running->myThread->run();
 	LOCK_INTR
-	cprintf("finished %d\r\n", Kernel::running->id);
 	Kernel::running->setStatus(FINISHED);
 	Kernel::idQueue->removeById(Kernel::running->getId());
 	PCB *pcb;
