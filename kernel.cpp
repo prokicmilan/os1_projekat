@@ -13,7 +13,6 @@ IdleThread* Kernel::idle = 0;
 Thread* Kernel::mainThread = 0;
 Queue* Kernel::idQueue = 0;
 Queue* Kernel::sleepingQueue = 0;
-volatile Time Kernel::cntr = 20;
 int Kernel::explicitDispatch = 0;
 pInterrupt Kernel::oldTmr = 0;
 
@@ -64,21 +63,24 @@ void interrupt Kernel::timerISR(...) {
 	if (!explicitDispatch) {
 		asm int 60h
 		tick();
-		static QueueIterator *qi = new QueueIterator(sleepingQueue);
+		static QueueIterator qi(sleepingQueue);
 		/* Prolazi kroz ceo niz uspavanih niti i osvezava im proteklo vreme.
 		* Ukoliko je nekoj niti isteklo vreme spavanja, odblokira je i 
 		* vraca je u Scheduler ali samo ako nije main ili idle nit
-		*/
-		while (!qi->isDone()) {
-			PCB *pcb = qi->next();
+		*/	
+		while (!qi.isDone()) {
+			PCB *pcb = qi.next();
 			if (++pcb->passedTime == pcb->sleepTime) {
 				pcb->status = READY;
+				if (pcb == Kernel::mainThread->myPCB) {
+					cprintf("main\r\n");
+				}
 				if (pcb != Kernel::mainThread->myPCB) {
 					Scheduler::put(pcb);
 				}
 			}
 		}
-		delete qi;
+		//delete qi;
 	}
 	if (running->timeSlice != 0) {
 		running->passedTime++;
@@ -109,7 +111,7 @@ void interrupt Kernel::timerISR(...) {
 				running = idle->myPCB;
 			}
 		}
-		cntr = running->timeSlice;
+		running->passedTime = 0;
 		tsp = running->sp;
 		tss = running->ss;
 		tbp = running->bp;

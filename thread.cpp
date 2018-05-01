@@ -5,8 +5,6 @@
 #include "queue.h"
 #include "def.h"
 
-#include <conio.h>
-
 Thread::Thread(StackSize stackSize, Time timeSlice) {
 	LOCK_INTR;
 	myPCB = new PCB(this, stackSize, timeSlice);
@@ -75,7 +73,7 @@ void Thread::waitToComplete() {
 		return;
 	}
 	//menja status, dodaje je u niz niti koje su blokirane i predaje procesor
-	Kernel::running->setStatus(BLOCKED);
+	Kernel::running->status = BLOCKED;
 	myPCB->waitingQueue->put(Kernel::running);
 	dispatch();
 	UNLOCK_INTR

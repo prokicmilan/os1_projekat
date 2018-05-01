@@ -4,20 +4,17 @@
 void tick() {}
 
 int userMain(int argc, char *argv[]) {
-	ThreadA *a = new ThreadA(50, 1024, 10);
-	ThreadA *b = new ThreadA(20, 1024, 20);
+	//ThreadA *a = new ThreadA(50, 1024, 10);
+	//ThreadA *b = new ThreadA(20, 1024, 20);
 
-	a->start();
-	b->start();
-	/*for (int i = 0; i < 0; i++) {
-		cout << "main: i = " << i << endl;
-		for (int j = 0; j < 30000; j++)
-			for (int k = 0; k < 30000; k++);
-	}*/
+	//a->start();
+	//b->start();
 	cout << "delete a" << endl;
-	delete a;
+	//delete a;
 	cout << "delete b" << endl;
-	delete b;
+	//delete b;
+	cout << "Sleep" << endl;
+	Thread::sleep(100);
 	cout << "Happy end!" << endl;
 
 	return 0;

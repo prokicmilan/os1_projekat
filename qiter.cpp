@@ -19,6 +19,7 @@ PCB* QueueIterator::next() {
 	LOCK_INTR
 	PCB *pcb = curr->pcb;
 	curr = curr->next;
+	UNLOCK_INTR
 	return pcb;
 }
 

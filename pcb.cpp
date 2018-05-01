@@ -4,17 +4,19 @@
 #include "schedule.h"
 #include <dos.h>
 
+#include <conio.h>
+
 ID PCB::prevID = 0;
 
 void PCB::wrapper() {
 	Kernel::running->myThread->run();
 	LOCK_INTR
-	Kernel::running->setStatus(FINISHED);
+	Kernel::running->status = FINISHED;
 	Kernel::idQueue->removeById(Kernel::running->getId());
 	PCB *pcb;
 	while (!Kernel::running->waitingQueue->isEmpty()) {
 		pcb = Kernel::running->waitingQueue->get();
-		pcb->setStatus(READY);
+		pcb->status = READY;
 		if (pcb != Kernel::mainThread->myPCB && pcb != Kernel::idle->myPCB) {
 			Scheduler::put(pcb);
 		}

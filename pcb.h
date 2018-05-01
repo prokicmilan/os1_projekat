@@ -24,7 +24,7 @@ private:
 	ID id;
 	StackSize stackSize;
 	Time timeSlice;
-	Time passedTime;
+	volatile Time passedTime;
 	Time sleepTime;
 
 	unsigned sp;

@@ -40,7 +40,6 @@ private:
 	static void interrupt timerISR(...);
 	static pInterrupt oldTmr;
 	static int explicitDispatch;
-	static volatile Time cntr;
 };
 
 #endif
