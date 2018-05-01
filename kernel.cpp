@@ -5,6 +5,8 @@
 #include "schedule.h"
 #include <dos.h>
 
+#include <conio.h>
+
 Kernel* Kernel::kernelInstance = 0;
 PCB* Kernel::running = 0;
 IdleThread* Kernel::idle = 0;
@@ -47,6 +49,7 @@ void Kernel::initialize() {
 	mainThread->myPCB->status = READY;
 	mainThread->myPCB->createStack();
 	idQueue = new Queue();
+	sleepingQueue = new Queue();
 	running = mainThread->myPCB;
 	UNLOCK_INTR
 }
@@ -54,6 +57,9 @@ void Kernel::initialize() {
 void Kernel::restore() {
 	LOCK_INTR
 	setvect(8, oldTmr);
+	delete idle;
+	delete idQueue;
+	delete sleepingQueue;
 	UNLOCK_INTR
 }
 
@@ -66,6 +72,7 @@ void interrupt Kernel::timerISR(...) {
 		* Ukoliko je nekoj niti isteklo vreme spavanja, odblokira je i 
 		* vraca je u Scheduler ali samo ako nije main ili idle nit
 		*/	
+		qi.toStart();
 		while (!qi.isDone()) {
 			PCB *pcb = qi.next();
 			if (++pcb->passedTime == pcb->sleepTime) {
@@ -77,7 +84,7 @@ void interrupt Kernel::timerISR(...) {
 		}
 		//delete qi;
 	}
-	if (running->timeSlice != 0) {
+	if (running->timeSlice != 0 && !explicitDispatch) {
 		running->passedTime++;
 	}
 	//TODO: zabrana preuzimanja bez zabrane prekida

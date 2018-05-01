@@ -17,8 +17,8 @@ int userMain(int argc, char *argv[]) {
 	delete b;
 	cout << "delete c" << endl;
 	delete c;
-	//cout << "Sleep" << endl;
-	//Thread::sleep(100);
+	cout << "Sleep" << endl;
+	Thread::sleep(100);
 	cout << "Happy end!" << endl;
 
 	return 0;
