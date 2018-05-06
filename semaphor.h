@@ -7,12 +7,14 @@ class Semaphore {
 public:
 	Semaphore(int init = 1);
 	virtual ~Semaphore();
+
 	virtual int wait(int toBlock);
 	virtual void signal();
+	
 	int val() const;
 
 private:
 	KernelSem *myImpl;
-}
+};
 
 #endif

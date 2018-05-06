@@ -13,6 +13,7 @@
 class Thread;
 class PCB;
 class Queue;
+class KernelSem;
 
 extern void tick();
 
@@ -25,6 +26,7 @@ public:
 protected:
 	friend class Thread;
 	friend class PCB;
+	friend class KernelSem;
 
 private:
 	static Kernel *kernelInstance;

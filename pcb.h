@@ -6,6 +6,7 @@
 
 class Queue;
 class Kernel;
+class KernelSem;
 
 class PCB {
 public:
@@ -19,6 +20,7 @@ public:
 protected:
 	friend class Thread;
 	friend class Kernel;
+	friend class KernelSem;
 
 private:
 	ID id;

@@ -80,7 +80,6 @@ void interrupt Kernel::timerISR(...) {
 				}
 			}
 		}
-		//delete qi;
 	}
 	if (running->timeSlice != 0 && !explicitDispatch) {
 		running->passedTime++;
