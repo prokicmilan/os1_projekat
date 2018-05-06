@@ -16,26 +16,6 @@ Thread::~Thread() {
 	delete myPCB;
 }
 
-ID Thread::getId() const {
-	return myPCB->getId();
-}
-
-ID Thread::getRunningId() {
-	LOCK_INTR
-	if (Kernel::running != 0) {
-		UNLOCK_INTR
-		return Kernel::running->getId();
-	}
-	else {
-		UNLOCK_INTR
-		return -1;
-	}
-}
-
-Thread* Thread::getThreadById(ID id) {
-	return 0;
-}
-
 //uspavljuje tekucu nit na odredjeno vreme, predaje procesor nekoj drugoj niti
 void Thread::sleep(Time timeToSleep) {
 	LOCK_INTR

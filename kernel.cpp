@@ -5,8 +5,6 @@
 #include "schedule.h"
 #include <dos.h>
 
-#include <conio.h>
-
 Kernel* Kernel::kernelInstance = 0;
 PCB* Kernel::running = 0;
 IdleThread* Kernel::idle = 0;

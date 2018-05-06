@@ -12,10 +12,7 @@ public:
 	void start();
 	void waitToComplete();
 	virtual ~Thread();
-	ID getId() const;
 
-	static ID getRunningId();
-	static Thread* getThreadById(ID id);
 	static void sleep(Time timeToSleep);
 
 protected:

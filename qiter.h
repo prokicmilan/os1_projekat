@@ -1,7 +1,8 @@
 /**
 * Pomocna klasa za iteriranje kroz fifo red. Na korisniku je da
-* pazi da ne pristupi null pokazivacu, klasa je opremljena metodom
-* koja govori da li je moguc pristup i prelazak na sledeci
+* pazi da ne pristupi null pokazivacu, klasa je opremljena metodama
+* za postavljanje pokazivaca na prvi element, na poslednji element,
+* proveru da li je pokazivac dosao do kraja i prelazak na sledeci element
 **/
 
 #ifndef _QITER_H_
