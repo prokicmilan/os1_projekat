@@ -5,7 +5,6 @@
 #include <conio.h>
 
 KernelSem::KernelSem(int init) {
-	cprintf("init = %d\r\n", init);
 	val = init;
 	blocked = new Queue();
 }
@@ -29,9 +28,7 @@ int KernelSem::wait(int toBlock) {
 		}
 	}
 	else {
-		cprintf("val = %d\r\n", val);
 		if (--val < 0) {
-			cprintf("blocking\r\n");
 			Kernel::running->status = BLOCKED;
 			blocked->put(Kernel::running);
 			Kernel::dispatch();

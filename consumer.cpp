@@ -6,6 +6,6 @@ void Consumer::run() {
 	for (int i = 0; i < 10; i++) {
 		num = buffer->get();
 		cout << "Izvadio " << num << endl;
-		//sleep(10);
+		sleep(100);
 	}
 }

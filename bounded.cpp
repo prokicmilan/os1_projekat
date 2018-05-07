@@ -1,13 +1,11 @@
 #include "bounded.h"
+#include <conio.h>
 
-Bounded::Bounded(int size) {
+Bounded::Bounded(int size) : mutex(1), spaceAvailable(size), itemAvailable(0) {
 	this->size = size;
 	head = 0;
 	tail = 0;
 	storage = new int[size];
-	mutex = Semaphore(1);
-	spaceAvailable = Semaphore(size);
-	itemAvailable = Semaphore(0);
 }
 
 Bounded::~Bounded() {

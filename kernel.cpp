@@ -5,6 +5,8 @@
 #include "schedule.h"
 #include <dos.h>
 
+#include <conio.h>
+
 Kernel* Kernel::kernelInstance = 0;
 PCB* Kernel::running = 0;
 IdleThread* Kernel::idle = 0;
@@ -75,6 +77,7 @@ void interrupt Kernel::timerISR(...) {
 			PCB *pcb = qi.next();
 			if (++pcb->passedTime == pcb->sleepTime) {
 				pcb->status = READY;
+				sleepingQueue->removeById(pcb->id);
 				if (pcb != Kernel::mainThread->myPCB) {
 					Scheduler::put(pcb);
 				}
@@ -85,7 +88,7 @@ void interrupt Kernel::timerISR(...) {
 		running->passedTime++;
 	}
 	//TODO: zabrana preuzimanja bez zabrane prekida
-	if (running->passedTime == running->timeSlice || explicitDispatch) {
+	if ((running->timeSlice != 0 && (running->passedTime == running->timeSlice)) || explicitDispatch) {
 		static unsigned tsp, tss, tbp;
 		asm {
 			mov tsp, sp

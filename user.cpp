@@ -23,11 +23,11 @@ int userMain(int argc, char *argv[]) {
 	cout << "Sleep" << endl;
 	Thread::sleep(100);*/
 	Bounded *b = new Bounded(3);
-	//Consumer *c = new Consumer(b);
+	Consumer *c = new Consumer(b);
 	Producer *p = new Producer(b);
 	p->start();
-	//c->start();
-	//delete c;
+	c->start();
+	delete c;
 	delete p;
 	delete b;
 	cout << "Happy end!" << endl;
