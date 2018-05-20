@@ -1,4 +1,4 @@
-#ifndef _CONSUMER_H_
+/*#ifndef _CONSUMER_H_
 #define _CONSUMER_H_
 
 #include "bounded.h"
@@ -21,4 +21,4 @@ private:
 	BoundedBuffer *buffer;
 };
 
-#endif
+#endif*/

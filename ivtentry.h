@@ -6,10 +6,10 @@
 #include "list.h"
 
 #define PREPAREENTRY(N,CALLOLD) void interrupt intr_##N(...);\
-								IVTEntry entry##N(N, FP_SEG(int_##N), FP_OFF(int_##N), CALLOLD);\
+								IVTEntry entry##N(N, FP_SEG(intr_##N), FP_OFF(intr_##N), CALLOLD);\
 								void interrupt intr_##N(...) {\
 									entries[N]->signalAll();\
-								 }\
+								 }
 
 class IVTEntry;
 class Event;

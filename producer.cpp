@@ -1,4 +1,4 @@
-#include "producer.h"
+/*#include "producer.h"
 #include <iostream.h>
 
 void Producer::run() {
@@ -7,4 +7,4 @@ void Producer::run() {
 		cout << "Stavio " << i << endl;
 		sleep(30);
 	}
-}
+}*/

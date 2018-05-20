@@ -1,4 +1,4 @@
-#ifndef _PRODUCER_H_
+/*#ifndef _PRODUCER_H_
 #define _PRODUCER_H_
 
 #include "bounded.h"
@@ -20,4 +20,4 @@ private:
 	BoundedBuffer *buffer;
 };
 
-#endif
+#endif*/

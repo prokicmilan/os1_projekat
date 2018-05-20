@@ -1,5 +1,4 @@
 #include "event.h"
-#include "ivtentry.h"
 #include "kernelev.h"
 
 Event::Event(IVTNo ivtNo) {

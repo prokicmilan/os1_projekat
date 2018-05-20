@@ -2,6 +2,7 @@
 #define _EVENT_H_
 
 #include "def.h"
+#include "ivtentry.h"
 
 class KernelEv;
 class IVTEntry;

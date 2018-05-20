@@ -1,4 +1,4 @@
-#include "consumer.h"
+/*#include "consumer.h"
 #include <iostream.h>
 
 void Consumer::run() {
@@ -8,4 +8,4 @@ void Consumer::run() {
 		cout << "Izvadio " << num << endl;
 		sleep(100);
 	}
-}
+}*/
