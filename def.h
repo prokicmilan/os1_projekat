@@ -10,6 +10,7 @@ typedef unsigned long StackSize;
 typedef unsigned int Time;
 typedef int ID;
 typedef	void interrupt (*pInterrupt)(...);
+typedef unsigned int IVTNo;
 
 const StackSize defaultStackSize = 4096;
 const Time defaultTimeSlice = 2;
