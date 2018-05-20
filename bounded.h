@@ -1,25 +1,37 @@
-#ifndef _BOUNDED_H_
-#define _BOUNDED_H_
+//===========================================================================//
+//   Project: Projekat iz Operativnih sistema 1
+//   File:    bounded.h
+//   Date:    Jun 2018
+//   Opis:		Kruzni ograniceni bafer sa sinhronizacijom; 
+//						
+//===========================================================================//
 
-#include "semaphore.h"
+#ifndef _OS1_BOUNDED_BUFFER_
+#define _OS1_BOUNDED_BUFFER_
 
-class Bounded {
+
+
+#include "semaphor.h"
+
+
+
+class BoundedBuffer {
 public:
-	Bounded(int size);
-	~Bounded();
-	int getSize() const;
-	int getNum() const;
-	void put(int num);
-	int get();
+
+	BoundedBuffer (unsigned size);
+	virtual ~BoundedBuffer ();
+	int append (char);
+	char take ();
+	int  fullCount(){return itemAvailable.val();};    // potrebno consumeru
 
 private:
-	int size;
-	int head;
-	int tail;
-	int *storage;
-	Semaphore mutex;
-	Semaphore spaceAvailable;
-	Semaphore itemAvailable;
+	unsigned Size;
+	Semaphore mutexa, mutext;
+	Semaphore spaceAvailable, itemAvailable;
+	char* buffer;
+	int head, tail;
+   
 };
 
-#endif
+
+#endif  // _OS1_BOUNDED_BUFFER_

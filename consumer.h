@@ -3,10 +3,11 @@
 
 #include "bounded.h"
 #include "thread.h"
+#include "def.h"
 
 class Consumer : public Thread {
 public:
-	Consumer(Bounded *b, StackSize stackSize = defaultStackSize, Time timeSlice = defaultTimeSlice) : Thread(stackSize, timeSlice) {
+	Consumer(BoundedBuffer *b, StackSize stackSize = defaultStackSize, Time timeSlice = defaultTimeSlice) : Thread(stackSize, timeSlice) {
 		buffer = b;
 	}
 
@@ -17,7 +18,7 @@ public:
 	virtual void run();
 
 private:
-	Bounded *buffer;
+	BoundedBuffer *buffer;
 };
 
 #endif

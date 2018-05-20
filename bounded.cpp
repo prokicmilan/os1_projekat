@@ -1,40 +1,43 @@
+//===========================================================================//
+//   Project: Projekat iz Operativnih sistema 1
+//   File:    bounded.cpp
+//   Date:    Jun 2018
+//===========================================================================//
 #include "bounded.h"
-#include <conio.h>
 
-Bounded::Bounded(int size) : mutex(1), spaceAvailable(size), itemAvailable(0) {
-	this->size = size;
-	head = 0;
-	tail = 0;
-	storage = new int[size];
+#include <stdlib.h>
+
+#include "intLock.h"
+
+BoundedBuffer::BoundedBuffer (unsigned size) : Size(size),
+	mutexa(1), mutext(1), spaceAvailable(size), itemAvailable(0),
+	head(0), tail(0) {
+		buffer = new char[size];
+		if (!buffer) exit(1);
+	}
+	
+BoundedBuffer::~BoundedBuffer(){
+	intLock
+	delete [] buffer;
+	intUnlock
 }
 
-Bounded::~Bounded() {
-	delete storage;
-}
-
-int Bounded::getSize() const {
-	return size;
-}
-
-int Bounded::getNum() const {
-	return tail - head;
-}
-
-void Bounded::put(int num) {
+int BoundedBuffer::append (char d) {
 	spaceAvailable.wait(1);
-	mutex.wait(1);
-	storage[tail] = num;
-	tail = (tail + 1) % size;
-	mutex.signal();
+	mutexa.wait(1);
+		buffer[tail] = d;
+		tail = (tail+1)%Size;
+	mutexa.signal();
 	itemAvailable.signal();
+	return 0;
 }
 
-int Bounded::get() {
+char BoundedBuffer::take () {
 	itemAvailable.wait(1);
-	mutex.wait(1);
-	int num = storage[head];
-	head = (head + 1) % size;
-	mutex.signal();
+	mutext.wait(1);
+		char d = buffer[head];
+		head = (head+1)%Size;
+	mutext.signal();
 	spaceAvailable.signal();
-	return num;
+	return d;
 }

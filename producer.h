@@ -6,7 +6,7 @@
 
 class Producer : public Thread {
 public:
-	Producer(Bounded *b, StackSize stackSize = defaultStackSize, Time timeSlice = defaultTimeSlice) : Thread(stackSize, timeSlice) {
+	Producer(BoundedBuffer *b, StackSize stackSize = defaultStackSize, Time timeSlice = defaultTimeSlice) : Thread(stackSize, timeSlice) {
 		buffer = b;
 	}
 
@@ -17,7 +17,7 @@ public:
 	virtual void run();
 
 private:
-	Bounded *buffer;
+	BoundedBuffer *buffer;
 };
 
 #endif
