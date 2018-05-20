@@ -2,6 +2,8 @@
 #define _IVTENTRY_H_
 
 #include <dos.h>
+#include "def.h"
+#include "list.h"
 
 #define PREPAREENTRY(N, CALLOLD) void interrupt int_##N(...) {\
 									entries[N]->signalAll();\
@@ -11,11 +13,11 @@
 class IVTEntry;
 class Event;
 
-IVTEntry *entries[256];
+extern IVTEntry *entries[256];
 
 class IVTEntry {
 public:
-	IVTEntry(IVTNo n, unsigned int newISRSeg, unsigned int newISROff, callOld);
+	IVTEntry(IVTNo n, unsigned int newISRSeg, unsigned int newISROff, unsigned int callOld);
 	~IVTEntry();
 	void signalAll();
 	void addEvent(Event *event);
@@ -26,6 +28,6 @@ private:
 	IVTNo n;
 	pInterrupt oldISR;
 	List *head;
-}
+};
 
 #endif

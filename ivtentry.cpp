@@ -1,7 +1,10 @@
 #include "ivtentry.h"
-#include "list.h"
+#include "kernel.h"
+#include "event.h"
 
-IVTEntry::IVTEntry(IVTNo n, unsigned int newISRSeg, unsigned int newISROff, callOld) {
+IVTEntry *entries[256];
+
+IVTEntry::IVTEntry(IVTNo n, unsigned int newISRSeg, unsigned int newISROff, unsigned int callOld) {
 	LOCK_INTR
 	this->n = n;
 	this->callOld = callOld;
@@ -15,7 +18,8 @@ IVTEntry::IVTEntry(IVTNo n, unsigned int newISRSeg, unsigned int newISROff, call
 		mov ax, 0
 		mov es, ax
 		mov bx, word ptr n
-		shl bx, 2
+		shl bx, 1
+		shl bx, 1
 		mov ax, word ptr ISROff
 		mov word ptr es:bx, ax
 		add bx, 2
@@ -31,7 +35,7 @@ IVTEntry::IVTEntry(IVTNo n, unsigned int newISRSeg, unsigned int newISROff, call
 }
 
 IVTEntry::~IVTEntry() {
-	delete list;
+	delete head;
 	setvect(n, oldISR);
 }
 

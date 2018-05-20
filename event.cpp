@@ -1,4 +1,6 @@
 #include "event.h"
+#include "ivtentry.h"
+#include "kernelev.h"
 
 Event::Event(IVTNo ivtNo) {
 	LOCK_INTR
@@ -11,7 +13,7 @@ Event::Event(IVTNo ivtNo) {
 
 Event::~Event() {
 	LOCK_INTR
-	IVTEntry *entry = IVTEntry::getEntry(ivtNo);
+	IVTEntry *entry = IVTEntry::getEntry(myImpl->getIVTNo());
 	if (entry == 0) return; //exception
 	entry->removeEvent(this);
 	delete myImpl;
