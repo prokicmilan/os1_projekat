@@ -1,8 +1,7 @@
 #include "kernelev.h"
 
-KernelEv::KernelEv(IVTNo ivtNo) : KernelSem(0) {
+KernelEv::KernelEv(IVTNo ivtNo) : Semaphore(0) {
 	this->ivtNo = ivtNo;
-	this->myPCB = Kernel::running;
 }
 
 IVTNo KernelEv::getIVTNo() const {

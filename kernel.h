@@ -1,5 +1,5 @@
 /**
-* Kernel, vrsi inicijalizaciju prekidnih rutina prilikom instanciranja,
+* Kernel vrsi inicijalizaciju prekidnih rutina prilikom instanciranja,
 * vraca stare prekidne rutine pri izvrsavanju destruktora
 * implementiran kao singleton - postoji samo jedan kernel u sistemu
 **/

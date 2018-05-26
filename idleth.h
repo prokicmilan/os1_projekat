@@ -1,6 +1,7 @@
 /**
 * Idle nit koja ne radi nista, predaje joj se CPU iskljucivo eksplicitno
-* kad ne postoji druga nit koja moze da se izvrsava
+* kad ne postoji druga nit koja moze da se izvrsava (sve niti su blokirane)
+* ali nisu zavrsile
 **/
 
 #ifndef _IDLETH_H_

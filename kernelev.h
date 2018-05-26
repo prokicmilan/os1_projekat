@@ -2,18 +2,15 @@
 #define _KERNELEV_H_
 
 #include "def.h"
-#include "krnlsem.h"
-#include "pcb.h"
-#include "kernel.h"
+#include "semaphor.h"
 
-class KernelEv : public KernelSem {
+class KernelEv : public Semaphore {
 public:
 	KernelEv(IVTNo ivtNo);
 	IVTNo getIVTNo() const;
 
 private:
 	IVTNo ivtNo;
-	PCB *myPCB;
 };
 
 #endif

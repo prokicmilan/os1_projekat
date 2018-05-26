@@ -2,7 +2,7 @@
 #define _DEF_H_
 
 /*
-* Sve potrebne definicije tipova i makroa
+* Sve potrebne definicije tipova i makroa (bez PREPAREENTRY)
 */
 
 typedef enum {NEW, READY, BLOCKED, FINISHED} Status;
@@ -12,7 +12,7 @@ typedef int ID;
 typedef	void interrupt (*pInterrupt)(...);
 typedef unsigned int IVTNo;
 
-const StackSize defaultStackSize = 4096;
+const StackSize defaultStackSize = 256;
 const Time defaultTimeSlice = 2;
 
 #define LOCK_INTR asm{\

@@ -5,8 +5,6 @@
 #include "schedule.h"
 #include <dos.h>
 
-#include <conio.h>
-
 Kernel* Kernel::kernelInstance = 0;
 PCB* Kernel::running = 0;
 IdleThread* Kernel::idle = 0;
@@ -40,12 +38,20 @@ void Kernel::dispatch() {
 
 void Kernel::initialize() {
 	LOCK_INTR
+/*	unsigned int z=1024;
+	asm{
+		MOV CX, z
+		MOV AL, CL
+		OUT 40h, AL
+		MOV AL, CH
+		OUT 40h, AL
+	};*/
 	oldTmr = getvect(0x08);
 	setvect(0x08, timerISR);
 	setvect(0x60, oldTmr);
 	idle = new IdleThread();
 	idle->start();
-	mainThread = new Thread(4096, 200);
+	mainThread = new Thread();
 	mainThread->myPCB->status = READY;
 	mainThread->myPCB->createStack();
 	idQueue = new Queue();

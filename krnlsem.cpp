@@ -2,8 +2,6 @@
 #include "kernel.h"
 #include "schedule.h"
 
-#include <conio.h>
-
 KernelSem::KernelSem(int init) {
 	val = init;
 	blocked = new Queue();

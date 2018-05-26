@@ -4,6 +4,11 @@
 
 IVTEntry *entries[256];
 
+/*
+* Pri pozivu konstruktora pamti se stara prekidna rutina, a na njeno mesto se upisuje
+* nova, data parametrima newISRSeg i newISROff. Na odgovarajuce mesto u nizu
+* svih objekata vezanih za ulaze se upisuje trenutno kreirani
+*/
 IVTEntry::IVTEntry(IVTNo n, unsigned int newISRSeg, unsigned int newISROff, unsigned int callOld) {
 	LOCK_INTR
 	this->n = n;
@@ -34,11 +39,22 @@ IVTEntry::IVTEntry(IVTNo n, unsigned int newISRSeg, unsigned int newISROff, unsi
 	UNLOCK_INTR
 }
 
+/*
+* Pri unistenju objekta potrebno je upisati staru prekidnu rutinu u odgovarajuci ulaz,
+* kao i obrisati sve dogadjaje vezane za tekuci objekat, ukoliko vec nisu (destruktor ne
+* bi trebalo da se pozove pre nego sto se svi dogadjaji odjave - uniste)
+*/
 IVTEntry::~IVTEntry() {
+	LOCK_INTR
 	delete head;
 	setvect(n, oldISR);
+	UNLOCK_INTR
 }
 
+/*
+* Dogadjaj se desio, poziva se stara prekidna rutina ako je tako specificirano,
+* i svim prijavljenim dogadjajima se salje signal
+*/
 void IVTEntry::signalAll() {
 	LOCK_INTR
 	if (callOld) {
@@ -53,18 +69,27 @@ void IVTEntry::signalAll() {
 	UNLOCK_INTR
 }
 
+/*
+* Prijavljivanje dogadjaja na ulaz (da bi vise dogadjaja moglo da ceka prekid sa istog ulaza)
+*/
 void IVTEntry::addEvent(Event *event) {
 	LOCK_INTR
 	head->add(event);
 	UNLOCK_INTR
 }
 
+/*
+* Odjavljivanje dogadjaja sa ulaza
+*/
 void IVTEntry::removeEvent(Event *event) {
 	LOCK_INTR
 	head->remove(event);
 	UNLOCK_INTR
 }
 
+/*
+* Dohvatanje objekta pridruzenom odgovarajucem ulazu (moze vratiti NULL)
+*/
 IVTEntry* IVTEntry::getEntry(IVTNo ivtNo) {
 	return entries[ivtNo];
 }

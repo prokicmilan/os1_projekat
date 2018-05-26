@@ -17,7 +17,7 @@ public:
 
 protected:
 	friend class PCB;
-	friend class IdleThread; //zbog drugacijeg starta za IdleThread, moze li elegantnije?
+	friend class IdleThread;
 	friend class Kernel;
 	Thread(StackSize stackSize = defaultStackSize, Time timeSlice = defaultTimeSlice);
 	virtual void run() {}
